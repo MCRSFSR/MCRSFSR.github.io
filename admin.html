@@ -60,6 +60,19 @@
     textarea { height: 140px; resize: vertical; }
     .row { background: #fbe9e7; border: 1px solid #c62828; padding: 10px 12px; margin: 10px 0; }
     .hidden { display: none; }
+    .dropzone {
+      margin-top: 4px;
+      border: 2px dashed #c62828;
+      background: #fff5f5;
+      padding: 18px;
+      text-align: center;
+      color: #c62828;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .dropzone.hover { background: #ffe3e3; }
+    .dropzone img { max-width: 100%; max-height: 160px; display: block; margin: 8px auto 0; border: 1px solid #808080; }
     button {
       margin-top: 14px;
       background: linear-gradient(#8b0000, #c62828);
@@ -129,8 +142,13 @@
         </div>
 
         <div class="field" id="imageField">
-          <label for="image">图片文件名（可选）</label>
-          <input type="text" id="image" placeholder="如 news-2.jpg / build-1.jpg（图片需已上传到仓库根目录）">
+          <label>图片（拖拽到下方或点击选择，可选）</label>
+          <div class="dropzone" id="dropZone">
+            <span id="dropText">将图片拖到这里，或点击选择文件</span>
+            <img id="preview" class="hidden" alt="预览">
+          </div>
+          <input type="file" id="fileInput" accept="image/*" class="hidden">
+          <div id="uploadStatus" class="tip"></div>
         </div>
 
         <div class="field">
@@ -185,6 +203,81 @@
     typeSel.onchange = syncType;
     syncType();
 
+    // ---- 图片拖拽上传 ----
+    let uploadedImage = ''; // 已上传到仓库的图片路径
+    const dropZone = document.getElementById('dropZone');
+    const dropText = document.getElementById('dropText');
+    const preview = document.getElementById('preview');
+    const fileInput = document.getElementById('fileInput');
+    const uploadStatus = document.getElementById('uploadStatus');
+
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); };
+
+    ['dragenter', 'dragover'].forEach(ev =>
+      dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('hover'); }));
+    ['dragleave', 'drop'].forEach(ev =>
+      dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('hover'); }));
+    dropZone.addEventListener('drop', e => {
+      const f = e.dataTransfer.files[0];
+      if (f) handleFile(f);
+    });
+
+    function fileToB64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => {
+          const bytes = new Uint8Array(reader.result);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+          resolve(btoa(binary));
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    async function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        uploadStatus.textContent = '请选择图片文件。';
+        return;
+      }
+      const pat = localStorage.getItem('gh_pat');
+      if (!pat) { uploadStatus.textContent = '请先保存 PAT 再上传图片。'; return; }
+
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove('hidden');
+      dropText.style.display = 'none';
+      uploadStatus.textContent = '正在上传图片……';
+
+      try {
+        const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+        const fname = 'images/' + Date.now() + '.' + ext; // 存到仓库 images/ 目录，避免重名覆盖
+        const b64 = await fileToB64(file);
+        const API = `https://api.github.com/repos/${REPO}/contents/${fname}`;
+        const put = await fetch(API, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + pat, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: 'Upload image: ' + fname,
+            content: b64,
+            branch: BRANCH
+          })
+        });
+        if (put.ok) {
+          uploadedImage = fname;
+          uploadStatus.textContent = '图片已上传：' + fname;
+        } else {
+          const err = await put.json().catch(() => ({}));
+          uploadedImage = '';
+          uploadStatus.textContent = '图片上传失败，HTTP ' + put.status + '：' + (err.message || '') + '（发布时将不含图片）';
+        }
+      } catch (e) {
+        uploadedImage = '';
+        uploadStatus.textContent = '图片上传出错：' + e.message;
+      }
+    }
+
     // UTF-8 安全 base64
     function toB64(str) { return btoa(unescape(encodeURIComponent(str))); }
     function fromB64(b64) { return decodeURIComponent(escape(atob(b64))); }
@@ -196,15 +289,14 @@
       const title = document.getElementById('title').value.trim();
       const builder = document.getElementById('builder').value.trim();
       const date = document.getElementById('date').value;
-      const image = document.getElementById('image').value.trim();
       const content = document.getElementById('content').value.trim();
       const msg = document.getElementById('msg');
       if (!title || !content) { alert('标题和内容不能为空'); return; }
 
       let item;
-      if (t === 'news') item = { title, date, image: image || undefined, content };
+      if (t === 'news') item = { title, date, image: uploadedImage || undefined, content };
       else if (t === 'articles') item = { title, date, content };
-      else item = { title, builder: builder || undefined, date, image: image || undefined, content };
+      else item = { title, builder: builder || undefined, date, image: uploadedImage || undefined, content };
 
       const PATH = PATHS[t];
       const API = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
@@ -246,8 +338,12 @@
           msg.textContent = '发布成功！等待 GitHub Pages 构建（约 1 分钟）后刷新对应页面即可看到。';
           document.getElementById('title').value = '';
           document.getElementById('builder').value = '';
-          document.getElementById('image').value = '';
           document.getElementById('content').value = '';
+          uploadedImage = '';
+          preview.classList.add('hidden');
+          preview.src = '';
+          dropText.style.display = '';
+          uploadStatus.textContent = '';
         } else {
           const err = await put.json().catch(() => ({}));
           msg.style.color = '#b71c1c';
