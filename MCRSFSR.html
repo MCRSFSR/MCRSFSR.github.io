@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的网站</title>
+  <title>方块世界服务器 - Minecraft 服务器介绍</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -13,13 +13,13 @@
       background: #f5f7fa;
     }
     header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
       color: #fff;
       padding: 60px 20px;
       text-align: center;
     }
-    header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    header p { font-size: 1.1rem; opacity: 0.9; }
+    header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 0 #1b5e20; }
+    header p { font-size: 1.1rem; opacity: 0.95; }
     nav {
       background: #fff;
       padding: 15px 20px;
@@ -27,6 +27,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      text-align: center;
     }
     nav a {
       color: #555;
@@ -34,7 +35,7 @@
       margin: 0 15px;
       font-weight: 500;
     }
-    nav a:hover { color: #667eea; }
+    nav a:hover { color: #2e7d32; }
     main {
       max-width: 1000px;
       margin: 40px auto;
@@ -45,8 +46,19 @@
       font-size: 1.8rem;
       margin-bottom: 20px;
       color: #444;
-      border-left: 4px solid #667eea;
+      border-left: 4px solid #43a047;
       padding-left: 12px;
+    }
+    .ip-box {
+      background: #1b5e20;
+      color: #fff;
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin: 10px 0;
     }
     .cards {
       display: grid;
@@ -59,12 +71,15 @@
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
       transition: transform 0.2s;
+      border-top: 3px solid #43a047;
     }
     .card:hover { transform: translateY(-5px); }
-    .card h3 { margin-bottom: 10px; color: #667eea; }
+    .card h3 { margin-bottom: 10px; color: #2e7d32; }
+    .contact-list { list-style: none; }
+    .contact-list li { padding: 8px 0; border-bottom: 1px solid #eee; }
     footer {
-      background: #2d3748;
-      color: #cbd5e0;
+      background: #1b5e20;
+      color: #c8e6c9;
       text-align: center;
       padding: 25px 20px;
       margin-top: 40px;
@@ -73,55 +88,62 @@
 </head>
 <body>
   <header>
-    <h1>欢迎来到我的网站</h1>
-    <p>这是一个使用纯 HTML 构建的基础页面</p>
+    <h1>方块世界 Minecraft 服务器</h1>
+    <p>与好友一起探索、建造与冒险的纯净生存乐园</p>
   </header>
 
   <nav>
     <a href="#home">首页</a>
-    <a href="#about">关于</a>
-    <a href="#services">服务</a>
-    <a href="#contact">联系</a>
+    <a href="#about">服务器介绍</a>
+    <a href="#modes">玩法特色</a>
+    <a href="#join">加入我们</a>
   </nav>
 
   <main>
     <section id="home">
       <h2>首页</h2>
-      <p>这里是网站的主内容区域。你可以根据需要修改文字、添加图片或链接。目前页面仅使用 HTML 和内部样式，后续可以引入 CSS 和 JavaScript 进行扩展。</p>
+      <p>欢迎来到「方块世界」！这是一个长期稳定运行的 Minecraft 服务器，致力于为玩家提供最纯粹的建造与生存体验。无论你是红石大佬还是建筑萌新，都能在这里找到属于自己的乐趣。</p>
+      <p>服务器当前版本：1.20.x（支持 Java 版）</p>
     </section>
 
     <section id="about">
-      <h2>关于我们</h2>
-      <p>这是一个示例段落。在这里介绍你的网站、团队或项目背景。</p>
+      <h2>服务器介绍</h2>
+      <p>「方块世界」成立于 2024 年，由一群热爱 Minecraft 的玩家自发搭建与维护。我们坚持无氪金、无付费特权，所有玩家在游戏中一律平等。服务器配备高性能主机，保障低延迟与 7×24 小时稳定运行。</p>
+      <p>我们的宗旨：让每一位玩家都能在方块的世界里自由创造，享受游戏最本真的快乐。</p>
     </section>
 
-    <section id="services">
-      <h2>我们的服务</h2>
+    <section id="modes">
+      <h2>玩法特色</h2>
       <div class="cards">
         <div class="card">
-          <h3>服务一</h3>
-          <p>简要描述第一项服务的内容与优势。</p>
+          <h3>生存模式</h3>
+          <p>原版生存体验，支持领地保护与玩家交易，新手也有完善的保护机制。</p>
         </div>
         <div class="card">
-          <h3>服务二</h3>
-          <p>简要描述第二项服务的内容与优势。</p>
+          <h3>创造模式</h3>
+          <p>无限资源自由建造，适合建筑爱好者发挥创意，展示你的专属作品。</p>
         </div>
         <div class="card">
-          <h3>服务三</h3>
-          <p>简要描述第三项服务的内容与优势。</p>
+          <h3>小游戏</h3>
+          <p>定期开放起床战争、空岛生存等趣味小游戏，周末还有玩家联机活动。</p>
         </div>
       </div>
     </section>
 
-    <section id="contact">
-      <h2>联系我们</h2>
-      <p>邮箱：example@example.com</p>
-      <p>电话：123-4567-8901</p>
+    <section id="join">
+      <h2>加入我们</h2>
+      <p>在游戏内点击「多人游戏」→「添加服务器」，输入下方地址即可加入：</p>
+      <div class="ip-box">play.fangkuai.world</div>
+      <ul class="contact-list">
+        <li><strong>QQ 交流群：</strong>123456789</li>
+        <li><strong>Discord：</strong>discord.gg/fangkuai</li>
+        <li><strong>官方论坛：</strong>forum.fangkuai.world</li>
+      </ul>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 我的网站. 保留所有权利.</p>
+    <p>&copy; 2026 方块世界 Minecraft 服务器. 保留所有权利.</p>
   </footer>
 </body>
 </html>
