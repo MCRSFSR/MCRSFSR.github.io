@@ -124,7 +124,7 @@
         box.innerHTML = list.map(b => `
           <div class="builditem">
             <h3>${escapeHtml(b.title)}</h3>
-            <div class="builddate">建造者：${escapeHtml(b.builder || '匿名')} ｜ 日期：${escapeHtml(b.date || '')}</div>
+            <div class="builddate">建造者：${escapeHtml(b.builder || '匿名')} ｜ 日期：${escapeHtml(b.date || '')}${b.author ? ` ｜ 署名：${escapeHtml(b.author)}` : ''}</div>
             ${b.image ? `<img src="${escapeAttr(b.image)}" alt="建筑图片">` : ''}
             <p>${escapeHtml(b.content || '').replace(/\n/g, '<br>')}</p>
           </div>`).join('');

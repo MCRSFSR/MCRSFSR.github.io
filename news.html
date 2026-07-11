@@ -118,7 +118,7 @@
         document.getElementById('news-list').innerHTML = list.map(n => `
           <div class="newsitem">
             <h3>${escapeHtml(n.title)}</h3>
-            <div class="newsdate">发布日期：${escapeHtml(n.date || '')}</div>
+            <div class="newsdate">发布日期：${escapeHtml(n.date || '')}${n.author ? ` &nbsp;|&nbsp; 署名：${escapeHtml(n.author)}` : ''}</div>
             ${n.image ? `<img src="${escapeAttr(n.image)}" alt="新闻图片">` : ''}
             <p>${escapeHtml(n.content || '').replace(/\n/g, '<br>')}</p>
           </div>`).join('');

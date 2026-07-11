@@ -107,7 +107,7 @@
         document.getElementById('article-list').innerHTML = list.map(a => `
           <div class="articleitem">
             <h3>${escapeHtml(a.title)}</h3>
-            <div class="articledate">发布日期：${escapeHtml(a.date || '')}</div>
+            <div class="articledate">发布日期：${escapeHtml(a.date || '')}${a.author ? ` &nbsp;|&nbsp; 署名：${escapeHtml(a.author)}` : ''}</div>
             <p>${escapeHtml(a.content || '').replace(/\n/g, '<br>')}</p>
           </div>`).join('');
       } catch (e) {
