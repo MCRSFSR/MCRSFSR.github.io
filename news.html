@@ -84,21 +84,49 @@
     </div>
     <div class="content">
       <h2>最新新闻</h2>
-
-      <div class="newsitem">
-        <h3>MCRSFSR 创造服务器今日正式开服！</h3>
-        <div class="newsdate">发布日期：2026-07-11</div>
-        <img src="news-1.jpg" alt="服务器开服宣传图">
-        <p>尊敬的同志们，大家下午好！感谢大家来参加服务器开服仪式。本服务器深刻吸取经验教训，听取各方合理建议，结合实际情况。本服务器实行 Java-基岩双轨制，以适应不同同志的需要。我们致力于建立一个更加和谐美好的服务器。愿我们在这里度过美好的时光！相信美好的前途！</p>
-        <p><strong>如何加入：</strong>请先加入 QQ 群 <strong>784823072</strong>，入群需审核，审核通过后将告知服务器地址与进入方式。</p>
+      <div id="news-list">
+        <div class="newsitem">
+          <h3>MCRSFSR 创造服务器今日正式开服！</h3>
+          <div class="newsdate">发布日期：2026-07-11</div>
+          <img src="news-1.jpg" alt="服务器开服宣传图">
+          <p>尊敬的同志们，大家下午好！感谢大家来参加服务器开服仪式。本服务器深刻吸取经验教训，听取各方合理建议，结合实际情况。本服务器实行 Java-基岩双轨制，以适应不同同志的需要。我们致力于建立一个更加和谐美好的服务器。愿我们在这里度过美好的时光！相信美好的前途！</p>
+          <p><strong>如何加入：</strong>请先加入 QQ 群 <strong>784823072</strong>，入群需审核，审核通过后将告知服务器地址与进入方式。</p>
+        </div>
       </div>
-
-      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="members.html">» 认识成员</a></p>
+      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="members.html">» 认识成员</a> &nbsp; <a href="admin.html">» 管理发布</a></p>
     </div>
     <div class="statusbar">
       <span>© 2026 MCRSFSR</span>
       <span>访客第 000128 位</span>
     </div>
   </div>
+
+  <script>
+    const NEWS_PATH = 'news.json';
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    }
+    function escapeAttr(s) {
+      return escapeHtml(s).replace(/"/g, '&quot;');
+    }
+    async function loadNews() {
+      try {
+        const res = await fetch(NEWS_PATH + '?t=' + Date.now());
+        if (!res.ok) return;
+        const list = await res.json();
+        if (!Array.isArray(list) || !list.length) return;
+        document.getElementById('news-list').innerHTML = list.map(n => `
+          <div class="newsitem">
+            <h3>${escapeHtml(n.title)}</h3>
+            <div class="newsdate">发布日期：${escapeHtml(n.date || '')}</div>
+            ${n.image ? `<img src="${escapeAttr(n.image)}" alt="新闻图片">` : ''}
+            <p>${escapeHtml(n.content || '').replace(/\n/g, '<br>')}</p>
+          </div>`).join('');
+      } catch (e) {
+        console.warn('新闻动态加载失败（本地预览需部署到 GitHub Pages 后生效）', e);
+      }
+    }
+    loadNews();
+  </script>
 </body>
 </html>

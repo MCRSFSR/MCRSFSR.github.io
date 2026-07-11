@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCRSFSR - 管理发布</title>
+  <link rel="icon" href="favicon.jpg">
+  <style>
+    body {
+      background: #cfcfcf;
+      font-family: Verdana, Tahoma, Arial, sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+      font-size: 13px;
+    }
+    .window {
+      width: 760px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #808080;
+    }
+    .titlebar {
+      background: linear-gradient(#8b0000, #c62828);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: bold;
+      font-size: 14px;
+      border-bottom: 1px solid #808080;
+    }
+    .navbar {
+      background: #e8e8e8;
+      padding: 6px 12px;
+      border-bottom: 1px solid #808080;
+    }
+    .navbar a {
+      color: #cc0000;
+      text-decoration: underline;
+      margin-right: 4px;
+    }
+    .navbar a:hover { color: #ff0000; }
+    .content { padding: 20px; }
+    .content h2 {
+      font-size: 16px;
+      color: #b71c1c;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      margin-top: 0;
+    }
+    label { display: block; margin-top: 12px; font-weight: bold; color: #444; }
+    input, textarea, select {
+      width: 100%;
+      padding: 6px 8px;
+      margin-top: 4px;
+      border: 1px solid #808080;
+      font-family: Verdana, Tahoma, Arial, sans-serif;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { height: 140px; resize: vertical; }
+    .row { background: #fbe9e7; border: 1px solid #c62828; padding: 10px 12px; margin: 10px 0; }
+    .hidden { display: none; }
+    button {
+      margin-top: 14px;
+      background: linear-gradient(#8b0000, #c62828);
+      color: #fff;
+      border: 1px solid #808080;
+      padding: 8px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: Verdana, Tahoma, Arial, sans-serif;
+    }
+    button:hover { background: #b71c1c; }
+    #msg { margin-top: 12px; font-weight: bold; }
+    .tip { color: #b71c1c; font-size: 12px; }
+    .statusbar {
+      background: #e8e8e8;
+      border-top: 1px solid #808080;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">■ MCRSFSR 管理发布</div>
+    <div class="navbar">
+      <a href="index.html">主页</a> |
+      <a href="members.html">成员</a> |
+      <a href="articles.html">文章</a> |
+      <a href="gallery.html">建筑展示</a> |
+      <a href="news.html">新闻</a>
+    </div>
+    <div class="content">
+      <h2>发布内容</h2>
+      <p class="tip">本页仅供管理员使用。PAT 仅保存在你本地浏览器（localStorage），不会上传。请勿在公共电脑保存，且不要把仓库写权限 PAT 泄露给不信任的人。</p>
+
+      <div class="row">
+        <label for="pat">GitHub PAT（个人访问令牌）</label>
+        <input type="password" id="pat" placeholder="粘贴你的 PAT，点击保存">
+        <button type="button" id="savePat">保存 PAT</button>
+        <span id="patStatus"></span>
+      </div>
+
+      <form id="publish-form">
+        <label for="type">发布类型</label>
+        <select id="type">
+          <option value="news">新闻</option>
+          <option value="articles">文章</option>
+          <option value="gallery">建筑展示</option>
+        </select>
+
+        <div class="field">
+          <label for="title">标题 / 名称</label>
+          <input type="text" id="title" placeholder="如：服务器维护公告">
+        </div>
+
+        <div class="field hidden" id="builderField">
+          <label for="builder">建造者</label>
+          <input type="text" id="builder" placeholder="玩家ID">
+        </div>
+
+        <div class="field">
+          <label for="date">发布日期</label>
+          <input type="date" id="date">
+        </div>
+
+        <div class="field" id="imageField">
+          <label for="image">图片文件名（可选）</label>
+          <input type="text" id="image" placeholder="如 news-2.jpg / build-1.jpg（图片需已上传到仓库根目录）">
+        </div>
+
+        <div class="field">
+          <label for="content">内容 / 简介</label>
+          <textarea id="content" placeholder="在这里写正文……"></textarea>
+        </div>
+
+        <button type="button" id="publish">发布</button>
+      </form>
+
+      <div id="msg"></div>
+      <p style="margin-top:14px;"><a href="news.html">» 新闻</a> &nbsp; <a href="articles.html">» 文章</a> &nbsp; <a href="gallery.html">» 建筑</a></p>
+    </div>
+    <div class="statusbar">
+      <span>© 2026 MCRSFSR</span>
+      <span>管理后台</span>
+    </div>
+  </div>
+
+  <script>
+    const REPO = 'MCRSFSR/MCRSFSR.github.io';
+    const BRANCH = 'main';
+    const PATHS = { news: 'news.json', articles: 'articles.json', gallery: 'gallery.json' };
+
+    // PAT 本地保存
+    const patInput = document.getElementById('pat');
+    const patStatus = document.getElementById('patStatus');
+    if (localStorage.getItem('gh_pat')) {
+      patInput.value = localStorage.getItem('gh_pat');
+      patStatus.textContent = '（已保存）';
+    }
+    document.getElementById('savePat').onclick = () => {
+      const v = patInput.value.trim();
+      if (!v) { alert('请先粘贴 PAT'); return; }
+      localStorage.setItem('gh_pat', v);
+      patStatus.textContent = '（已保存）';
+      alert('PAT 已保存到本地浏览器。');
+    };
+
+    // 默认日期
+    document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+
+    // 类型切换：显示/隐藏对应字段
+    const typeSel = document.getElementById('type');
+    const builderField = document.getElementById('builderField');
+    const imageField = document.getElementById('imageField');
+    function syncType() {
+      const t = typeSel.value;
+      builderField.classList.toggle('hidden', t !== 'gallery');
+      imageField.classList.toggle('hidden', t === 'articles');
+    }
+    typeSel.onchange = syncType;
+    syncType();
+
+    // UTF-8 安全 base64
+    function toB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function fromB64(b64) { return decodeURIComponent(escape(atob(b64))); }
+
+    document.getElementById('publish').onclick = async () => {
+      const pat = localStorage.getItem('gh_pat');
+      if (!pat) { alert('请先填写并保存 PAT'); return; }
+      const t = typeSel.value;
+      const title = document.getElementById('title').value.trim();
+      const builder = document.getElementById('builder').value.trim();
+      const date = document.getElementById('date').value;
+      const image = document.getElementById('image').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const msg = document.getElementById('msg');
+      if (!title || !content) { alert('标题和内容不能为空'); return; }
+
+      let item;
+      if (t === 'news') item = { title, date, image: image || undefined, content };
+      else if (t === 'articles') item = { title, date, content };
+      else item = { title, builder: builder || undefined, date, image: image || undefined, content };
+
+      const PATH = PATHS[t];
+      const API = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+      msg.style.color = '#444';
+      msg.textContent = '正在读取现有数据……';
+
+      try {
+        const res = await fetch(API, { headers: { 'Authorization': 'Bearer ' + pat } });
+        let list = [], sha = null;
+        if (res.status === 200) {
+          const data = await res.json();
+          try { list = JSON.parse(fromB64(data.content)); } catch (e) { list = []; }
+          if (!Array.isArray(list)) list = [];
+          sha = data.sha;
+        } else if (res.status === 404) {
+          list = [];
+        } else {
+          msg.style.color = '#b71c1c';
+          msg.textContent = '读取失败，HTTP ' + res.status + '（检查 PAT 权限 / 仓库名）';
+          return;
+        }
+
+        list.unshift(item);
+        const body = {
+          message: 'Add ' + t + ': ' + title,
+          content: toB64(JSON.stringify(list, null, 2)),
+          branch: BRANCH
+        };
+        if (sha) body.sha = sha;
+
+        msg.textContent = '正在提交到 GitHub……';
+        const put = await fetch(API, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + pat, 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (put.ok) {
+          msg.style.color = '#2e7d32';
+          msg.textContent = '发布成功！等待 GitHub Pages 构建（约 1 分钟）后刷新对应页面即可看到。';
+          document.getElementById('title').value = '';
+          document.getElementById('builder').value = '';
+          document.getElementById('image').value = '';
+          document.getElementById('content').value = '';
+        } else {
+          const err = await put.json().catch(() => ({}));
+          msg.style.color = '#b71c1c';
+          msg.textContent = '发布失败，HTTP ' + put.status + '：' + (err.message || '');
+        }
+      } catch (e) {
+        msg.style.color = '#b71c1c';
+        msg.textContent = '出错：' + e.message;
+      }
+    };
+  </script>
+</body>
+</html>

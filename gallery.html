@@ -91,23 +91,48 @@
     </div>
     <div class="content">
       <h2>建筑展示</h2>
-      <div class="empty">
-        暂无建筑作品，敬请期待。
+      <div id="gallery-list">
+        <div class="empty">暂无建筑作品，敬请期待。</div>
       </div>
-      <!-- 新增建筑作品请复制以下结构：
-      <div class="builditem">
-        <h3>建筑名称</h3>
-        <div class="builddate">建造者：玩家ID ｜ 日期：2026-07-11</div>
-        <img src="build-1.jpg" alt="建筑图片">
-        <p>建筑简介……</p>
-      </div>
-      -->
-      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a></p>
+      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a> &nbsp; <a href="admin.html">» 管理发布</a></p>
     </div>
     <div class="statusbar">
       <span>© 2026 MCRSFSR</span>
       <span>访客第 000128 位</span>
     </div>
   </div>
+
+  <script>
+    const PATH = 'gallery.json';
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    }
+    function escapeAttr(s) {
+      return escapeHtml(s).replace(/"/g, '&quot;');
+    }
+    async function loadGallery() {
+      try {
+        const res = await fetch(PATH + '?t=' + Date.now());
+        if (!res.ok) return;
+        const list = await res.json();
+        if (!Array.isArray(list)) return;
+        const box = document.getElementById('gallery-list');
+        if (!list.length) {
+          box.innerHTML = '<div class="empty">暂无建筑作品，敬请期待。</div>';
+          return;
+        }
+        box.innerHTML = list.map(b => `
+          <div class="builditem">
+            <h3>${escapeHtml(b.title)}</h3>
+            <div class="builddate">建造者：${escapeHtml(b.builder || '匿名')} ｜ 日期：${escapeHtml(b.date || '')}</div>
+            ${b.image ? `<img src="${escapeAttr(b.image)}" alt="建筑图片">` : ''}
+            <p>${escapeHtml(b.content || '').replace(/\n/g, '<br>')}</p>
+          </div>`).join('');
+      } catch (e) {
+        console.warn('建筑动态加载失败（本地预览需部署到 GitHub Pages 后生效）', e);
+      }
+    }
+    loadGallery();
+  </script>
 </body>
 </html>

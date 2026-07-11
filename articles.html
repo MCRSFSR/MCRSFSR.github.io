@@ -47,13 +47,14 @@
       padding-bottom: 4px;
       margin-top: 0;
     }
-    .empty {
-      border: 1px dashed #c62828;
-      padding: 30px;
-      text-align: center;
-      color: #999;
+    .articleitem {
+      border: 1px solid #808080;
+      padding: 12px;
+      margin-bottom: 16px;
       background: #fafafa;
     }
+    .articleitem h3 { margin: 0 0 4px 0; color: #b71c1c; font-size: 14px; }
+    .articledate { font-size: 11px; color: #777; margin-bottom: 8px; }
     .statusbar {
       background: #e8e8e8;
       border-top: 1px solid #808080;
@@ -77,26 +78,43 @@
     </div>
     <div class="content">
       <h2>文章</h2>
-
-      <div class="articleitem" style="border:1px solid #808080;padding:12px;margin-bottom:16px;background:#fafafa;">
-        <h3 style="margin:0 0 4px 0;color:#b71c1c;font-size:14px;">开服仪式演讲稿</h3>
-        <div style="font-size:11px;color:#777;margin-bottom:8px;">发布日期：2026-07-11</div>
-        <p>尊敬的同志们，大家下午好！感谢大家来参加服务器开服仪式。本服务器深刻吸取经验教训，听取各方合理建议，结合实际情况。本服务器实行 Java-基岩双轨制，以适应不同同志的需要。我们致力于建立一个更加和谐美好的服务器。愿我们在这里度过美好的时光！相信美好的前途！</p>
+      <div id="article-list">
+        <div class="articleitem">
+          <h3>开服仪式演讲稿</h3>
+          <div class="articledate">发布日期：2026-07-11</div>
+          <p>尊敬的同志们，大家下午好！感谢大家来参加服务器开服仪式。本服务器深刻吸取经验教训，听取各方合理建议，结合实际情况。本服务器实行 Java-基岩双轨制，以适应不同同志的需要。我们致力于建立一个更加和谐美好的服务器。愿我们在这里度过美好的时光！相信美好的前途！</p>
+        </div>
       </div>
-
-      <!-- 新增文章请复制以下结构：
-      <div class="articleitem" style="border:1px solid #808080;padding:12px;margin-bottom:16px;background:#fafafa;">
-        <h3 style="margin:0 0 4px 0;color:#b71c1c;font-size:14px;">文章标题</h3>
-        <div style="font-size:11px;color:#777;margin-bottom:8px;">发布日期：2026-07-11</div>
-        <p>文章内容……</p>
-      </div>
-      -->
-      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a></p>
+      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a> &nbsp; <a href="admin.html">» 管理发布</a></p>
     </div>
     <div class="statusbar">
       <span>© 2026 MCRSFSR</span>
       <span>访客第 000128 位</span>
     </div>
   </div>
+
+  <script>
+    const PATH = 'articles.json';
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    }
+    async function loadArticles() {
+      try {
+        const res = await fetch(PATH + '?t=' + Date.now());
+        if (!res.ok) return;
+        const list = await res.json();
+        if (!Array.isArray(list) || !list.length) return;
+        document.getElementById('article-list').innerHTML = list.map(a => `
+          <div class="articleitem">
+            <h3>${escapeHtml(a.title)}</h3>
+            <div class="articledate">发布日期：${escapeHtml(a.date || '')}</div>
+            <p>${escapeHtml(a.content || '').replace(/\n/g, '<br>')}</p>
+          </div>`).join('');
+      } catch (e) {
+        console.warn('文章动态加载失败（本地预览需部署到 GitHub Pages 后生效）', e);
+      }
+    }
+    loadArticles();
+  </script>
 </body>
 </html>
