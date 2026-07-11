@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MCRSFSR - 成员</title>
+  <title>MCRSFSR - 建筑展示</title>
   <link rel="icon" href="favicon.jpg">
   <style>
     body {
@@ -47,18 +47,27 @@
       padding-bottom: 4px;
       margin-top: 0;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
+    .builditem {
       border: 1px solid #808080;
-      padding: 6px 10px;
-      text-align: left;
+      padding: 12px;
+      margin-bottom: 16px;
+      background: #fafafa;
     }
-    th { background: #c62828; color: #fff; }
-    tr:nth-child(even) { background: #f0f0f0; }
+    .builditem h3 { margin: 0 0 4px 0; color: #b71c1c; font-size: 14px; }
+    .builddate { font-size: 11px; color: #777; margin-bottom: 8px; }
+    .builditem img {
+      max-width: 100%;
+      border: 1px solid #808080;
+      margin: 8px 0;
+      display: block;
+    }
+    .empty {
+      border: 1px dashed #c62828;
+      padding: 30px;
+      text-align: center;
+      color: #999;
+      background: #fafafa;
+    }
     .statusbar {
       background: #e8e8e8;
       border-top: 1px solid #808080;
@@ -81,16 +90,18 @@
       <a href="news.html">新闻</a>
     </div>
     <div class="content">
-      <h2>团队成员</h2>
-      <p>以下为本服务器的创始与管理团队（占位示例，请替换为真实信息）：</p>
-      <table>
-        <tr><th>游戏 ID</th><th>职务</th><th>简介</th></tr>
-        <tr><td>Commissar_01</td><td>服主 / 总管</td><td>负责服务器整体运营与维护。</td></tr>
-        <tr><td>RedBuilder</td><td>建筑监理</td><td>主导地标规划与建造规范。</td></tr>
-        <tr><td>ModAdmin</td><td>Mod 管理</td><td>负责 Mod 配置与版本兼容。</td></tr>
-        <tr><td>PluginAdmin</td><td>插件管理</td><td>负责插件配置与功能调试。</td></tr>
-        <tr><td>IronMod</td><td>值班管理</td><td>处理玩家事务与秩序维护。</td></tr>
-      </table>
+      <h2>建筑展示</h2>
+      <div class="empty">
+        暂无建筑作品，敬请期待。
+      </div>
+      <!-- 新增建筑作品请复制以下结构：
+      <div class="builditem">
+        <h3>建筑名称</h3>
+        <div class="builddate">建造者：玩家ID ｜ 日期：2026-07-11</div>
+        <img src="build-1.jpg" alt="建筑图片">
+        <p>建筑简介……</p>
+      </div>
+      -->
       <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a></p>
     </div>
     <div class="statusbar">
