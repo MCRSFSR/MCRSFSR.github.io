@@ -197,7 +197,7 @@
         function fromB64(b64){ return decodeURIComponent(escape(atob(b64))); }
 
         // 内置留言专用降级 PAT（仅授权本仓库 Contents 读写），访客无需手动粘贴
-        const DEFAULT_PAT = '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';
+        const DEFAULT_PAT = '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';
         const gbpatInput = document.getElementById('gbpat');
         const gbpatStatus = document.getElementById('gbpatStatus');
         gbpatInput.value = localStorage.getItem('gb_pat') || DEFAULT_PAT;
