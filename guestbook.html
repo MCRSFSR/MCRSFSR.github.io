@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCRSFSR - 留言板</title>
+  <link rel="icon" href="favicon.jpg">
+  <style>
+    body {
+      background: #cfcfcf;
+      font-family: Verdana, Tahoma, Arial, sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+      font-size: 13px;
+    }
+    .window {
+      width: 760px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #808080;
+    }
+    .titlebar {
+      background: linear-gradient(#8b0000, #c62828);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: bold;
+      font-size: 14px;
+      border-bottom: 1px solid #808080;
+    }
+    .navbar {
+      background: #e8e8e8;
+      padding: 6px 12px;
+      border-bottom: 1px solid #808080;
+    }
+    .navbar a {
+      color: #cc0000;
+      text-decoration: underline;
+      margin-right: 4px;
+    }
+    .navbar a:hover { color: #ff0000; }
+    .content { padding: 20px; }
+    .content h2 {
+      font-size: 16px;
+      color: #b71c1c;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      margin-top: 0;
+    }
+    .tip { color: #b71c1c; font-size: 12px; }
+    .statusbar {
+      background: #e8e8e8;
+      border-top: 1px solid #808080;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+    }
+    /* ===== 复古1950风 ===== */
+    body {
+      background: #241a12;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      color: #2a2118;
+      padding: 24px;
+    }
+    .window {
+      box-sizing: border-box;
+      width: 820px; max-width: 100%; margin: 0 auto;
+      background: #ece1c4;
+      border: 3px double #9e1b1b;
+      box-shadow: 0 0 0 6px #ece1c4, 0 0 0 9px #caa64a, 0 16px 44px rgba(0,0,0,.55);
+    }
+    .titlebar {
+      background: linear-gradient(#9e1b1b, #c1121f);
+      color: #f3e6c4;
+      border-bottom: 3px double #caa64a;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 1px 1px 0 #5a0d0d;
+    }
+    .navbar {
+      background: #d9c9a0;
+      border-bottom: 2px solid #9e1b1b;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+    .navbar a {
+      color: #9e1b1b; font-weight: bold;
+      text-decoration: underline; letter-spacing: 1px;
+    }
+    .navbar a:hover { color: #caa64a; }
+    .content {
+      background:
+        repeating-linear-gradient(0deg, rgba(90,40,20,.04) 0 1px, transparent 1px 4px),
+        #ece1c4;
+      padding: 22px;
+    }
+    .content h2 {
+      font-size: 22px; color: #9e1b1b;
+      border-bottom: 3px double #caa64a;
+      padding-bottom: 6px; margin-top: 0;
+      letter-spacing: 2px; font-weight: 900;
+    }
+    .content h2::before { content: "★ "; color: #caa64a; }
+    a { color: #9e1b1b; }
+    a:hover { color: #caa64a; }
+    .tip { color: #7a1414; }
+    .statusbar {
+      background: #9e1b1b; color: #f3e6c4;
+      border-top: 3px double #caa64a;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      letter-spacing: 1px; font-weight: bold;
+    }
+    .gform { background:#d9c9a0; border:2px solid #9e1b1b; padding:14px; margin:10px 0; }
+    .gform input, .gform textarea {
+      box-sizing:border-box; width:100%; margin-bottom:10px;
+      background:#fdf6e3; border:1px solid #caa64a; color:#2a2118;
+      font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:15px; padding:8px 10px;
+    }
+    .gform textarea { min-height:80px; resize:vertical; }
+    .gform button {
+      background:linear-gradient(#9e1b1b,#c1121f); color:#f3e6c4;
+      border:2px solid #caa64a; padding:8px 18px; font-weight:bold;
+      letter-spacing:2px; cursor:pointer; font-family:inherit; font-size:14px;
+    }
+    .gform button:hover { background:linear-gradient(#7a1414,#9e1b1b); }
+    .glist { margin-top:18px; }
+    .gitem { background:#f3e6c4; border:1px solid #caa64a; border-left:4px solid #9e1b1b; padding:10px 12px; margin-bottom:10px; }
+    .gmeta { display:flex; justify-content:space-between; font-size:12px; color:#7a1414; margin-bottom:4px; }
+    .gauthor { font-weight:bold; }
+    .gtext { font-size:14px; line-height:1.5; color:#2a2118; white-space:pre-wrap; word-break:break-word; }
+    .empty { color:#7a1414; text-align:center; }
+    .row { background:#f3e6c4; border:2px solid #9e1b1b; padding:10px 12px; margin:10px 0; }
+    .row label { display:block; margin-bottom:4px; font-weight:bold; color:#7a1414; }
+    .row input {
+      box-sizing:border-box; width:100%; padding:8px 10px;
+      background:#fdf6e3; border:1px solid #caa64a; color:#2a2118;
+      font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:14px;
+    }
+    .row button {
+      margin-top:8px; background:linear-gradient(#7a1414,#c1121f); color:#f3e6c4;
+      border:2px solid #caa64a; padding:6px 14px; font-weight:bold; cursor:pointer;
+      font-family:Georgia,"Times New Roman","Songti SC",serif; letter-spacing:1px;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 8px; }
+      .window { width: 100%; max-width: 100%; }
+      .navbar { font-size: 12px; word-break: break-word; }
+      .navbar a { margin-right: 2px; }
+      .content { padding: 14px; }
+      .statusbar { font-size: 10px; flex-direction: column; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">■ MCRSFSR Minecraft 服务器</div>
+    <div class="navbar">
+      <a href="index.html">主页</a> |
+      <a href="members.html">成员</a> |
+      <a href="articles.html">文章</a> |
+      <a href="gallery.html">建筑展示</a> |
+      <a href="guestbook.html">留言</a> |
+      <a href="news.html">新闻</a>
+    </div>
+    <div class="content">
+      <h2>留言板</h2>
+      <p>欢迎各位同志在下方留言、交流建议！本留言板<span class="tip">无需 GitHub 账号</span>，使用服务器公开的「留言专用令牌」直接提交，所有人可见。</p>
+      <p class="tip">首次留言请先在下方粘贴「留言专用降级 PAT」（仅授权本仓库 Contents 读写、短过期），保存后仅存于你本地浏览器。</p>
+
+      <div class="row">
+        <label for="gbpat">留言专用令牌（PAT）</label>
+        <input type="password" id="gbpat" placeholder="粘贴留言专用降级 PAT，点击保存">
+        <button type="button" id="saveGbPat">保存令牌</button>
+        <span id="gbpatStatus"></span>
+      </div>
+
+      <form id="gform" class="gform">
+        <input id="gname" type="text" maxlength="24" placeholder="你的昵称（同志）" required>
+        <textarea id="gmsg" maxlength="500" placeholder="写下你的留言……" required></textarea>
+        <button type="submit">★ 发表留言</button>
+      </form>
+      <p id="gtip" class="tip" style="display:none;"></p>
+
+      <div id="glist" class="glist"></div>
+
+      <script>
+        const REPO = 'MCRSFSR/MCRSFSR.github.io';
+        const BRANCH = 'main';
+        const PATH = 'guestbook.json';
+        const fmt = t => new Date(t).toLocaleString('zh-CN');
+        function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        function toB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+        function fromB64(b64){ return decodeURIComponent(escape(atob(b64))); }
+
+        // PAT 本地保存（与新闻发布用的高权限 PAT 分开）
+        const gbpatInput = document.getElementById('gbpat');
+        const gbpatStatus = document.getElementById('gbpatStatus');
+        if (localStorage.getItem('gb_pat')) { gbpatInput.value = localStorage.getItem('gb_pat'); gbpatStatus.textContent = '（已保存）'; }
+        document.getElementById('saveGbPat').onclick = () => {
+          const v = gbpatInput.value.trim();
+          if (!v) { alert('请先粘贴 PAT'); return; }
+          localStorage.setItem('gb_pat', v);
+          gbpatStatus.textContent = '（已保存）';
+        };
+
+        // 读取（公开，无需 PAT）
+        async function loadGB(){
+          try {
+            const res = await fetch(PATH + '?t=' + Date.now());
+            if (!res.ok) return [];
+            const list = await res.json();
+            return Array.isArray(list) ? list : [];
+          } catch(e){ return []; }
+        }
+        async function renderGB(){
+          const list = document.getElementById('glist');
+          const data = await loadGB();
+          if(!data.length){ list.innerHTML = '<p class="empty">还没有留言，快来当第一个吧！</p>'; return; }
+          list.innerHTML = data.map(d =>
+            '<div class="gitem"><div class="gmeta"><span class="gauthor">'+escapeHtml(d.name)+
+            '</span><span class="gtime">'+fmt(d.t)+'</span></div><div class="gtext">'+escapeHtml(d.msg)+'</div></div>'
+          ).join('');
+        }
+
+        document.getElementById('gform').addEventListener('submit', async e => {
+          e.preventDefault();
+          const pat = localStorage.getItem('gb_pat');
+          if (!pat) { alert('请先在上方粘贴并保存「留言专用 PAT」'); return; }
+          const name = document.getElementById('gname').value.trim();
+          const msg = document.getElementById('gmsg').value.trim();
+          if(!name || !msg) return;
+          const tip = document.getElementById('gtip');
+          tip.style.display = 'block';
+          tip.textContent = '正在提交到 GitHub……';
+
+          try {
+            const API = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+            const res = await fetch(API, { headers: { 'Authorization': 'Bearer ' + pat } });
+            let list = [], sha = null;
+            if (res.status === 200) {
+              const data = await res.json();
+              try { list = JSON.parse(fromB64(data.content)); } catch(e){ list = []; }
+              if (!Array.isArray(list)) list = [];
+              sha = data.sha;
+            } else if (res.status === 404) {
+              list = [];
+            } else {
+              tip.textContent = '读取失败，HTTP ' + res.status + '（检查 PAT 权限）';
+              return;
+            }
+            list.unshift({ name, msg, t: Date.now() });
+            const body = { message: 'Guestbook: ' + name, content: toB64(JSON.stringify(list, null, 2)), branch: BRANCH };
+            if (sha) body.sha = sha;
+            const put = await fetch(API, {
+              method: 'PUT',
+              headers: { 'Authorization': 'Bearer ' + pat, 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+            if (put.ok) {
+              document.getElementById('gform').reset();
+              tip.textContent = '留言已发表！等待 GitHub Pages 构建（约 1 分钟）后刷新即可看到。';
+              renderGB();
+            } else {
+              const err = await put.json().catch(() => ({}));
+              tip.textContent = '提交失败，HTTP ' + put.status + '：' + (err.message || '');
+            }
+          } catch(e2) {
+            tip.textContent = '出错：' + e2.message;
+          }
+        });
+        renderGB();
+      </script>
+
+      <p style="margin-top:14px;"><a href="index.html">» 返回主页</a> &nbsp; <a href="news.html">» 查看新闻</a></p>
+    </div>
+    <div class="statusbar">
+      <span>© 2026 MCRSFSR</span>
+      <span>访客第 000128 位</span>
+    </div>
+  </div>
+</body>
+</html>

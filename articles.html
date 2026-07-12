@@ -64,6 +64,79 @@
       display: flex;
       justify-content: space-between;
     }
+    /* ===== 复古1950风 ===== */
+    body {
+      background: #241a12;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      color: #2a2118;
+      padding: 24px;
+    }
+    .window {
+      box-sizing: border-box;
+      width: 820px; max-width: 100%; margin: 0 auto;
+      background: #ece1c4;
+      border: 3px double #9e1b1b;
+      box-shadow: 0 0 0 6px #ece1c4, 0 0 0 9px #caa64a, 0 16px 44px rgba(0,0,0,.55);
+    }
+    .titlebar {
+      background: linear-gradient(#9e1b1b, #c1121f);
+      color: #f3e6c4;
+      border-bottom: 3px double #caa64a;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 1px 1px 0 #5a0d0d;
+    }
+    .navbar {
+      background: #d9c9a0;
+      border-bottom: 2px solid #9e1b1b;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+    .navbar a {
+      color: #9e1b1b; font-weight: bold;
+      text-decoration: underline; letter-spacing: 1px;
+    }
+    .navbar a:hover { color: #caa64a; }
+    .content {
+      background:
+        repeating-linear-gradient(0deg, rgba(90,40,20,.04) 0 1px, transparent 1px 4px),
+        #ece1c4;
+      padding: 22px;
+    }
+    .content h2 {
+      font-size: 22px; color: #9e1b1b;
+      border-bottom: 3px double #caa64a;
+      padding-bottom: 6px; margin-top: 0;
+      letter-spacing: 2px; font-weight: 900;
+    }
+    .content h2::before { content: "★ "; color: #caa64a; }
+    a { color: #9e1b1b; }
+    a:hover { color: #caa64a; }
+    .statusbar {
+      background: #9e1b1b; color: #f3e6c4;
+      border-top: 3px double #caa64a;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      letter-spacing: 1px; font-weight: bold;
+    }
+    .articleitem {
+      border: 2px solid #9e1b1b;
+      border-left: 8px solid #9e1b1b;
+      padding: 14px 16px; margin-bottom: 18px;
+      background: #f3e6c4;
+    }
+    .articleitem h3 { color: #9e1b1b; font-weight: 900; letter-spacing: 1px; }
+    .articledate { color: #7a1414; font-weight: bold; }
+
+    @media (max-width: 768px) {
+      body { padding: 8px; }
+      .window { width: 100%; max-width: 100%; }
+      .navbar { font-size: 12px; word-break: break-word; }
+      .navbar a { margin-right: 2px; }
+      .content { padding: 14px; }
+      .statusbar { font-size: 10px; flex-direction: column; gap: 2px; }
+      input, textarea, select { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -74,6 +147,7 @@
       <a href="members.html">成员</a> |
       <a href="articles.html">文章</a> |
       <a href="gallery.html">建筑展示</a> |
+      <a href="guestbook.html">留言</a> |
       <a href="news.html">新闻</a>
     </div>
     <div class="content">
