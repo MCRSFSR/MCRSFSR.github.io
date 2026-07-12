@@ -1,6 +1,27 @@
 [
-  { "id": "Revolutionary", "role": "联布第一书记", "intro": "" },
-  { "id": "白芝麻热干面", "role": "主席", "intro": "" },
-  { "id": "НикитичНикита Кулиk", "role": "副主席", "intro": "" },
-  { "id": "太初", "role": "工科部部长", "intro": "" }
+  {
+    "id": "CloudfoxMC",
+    "role": "建筑部部长",
+    "intro": ""
+  },
+  {
+    "id": "Revolutionary",
+    "role": "联布第一书记",
+    "intro": ""
+  },
+  {
+    "id": "白芝麻热干面",
+    "role": "主席",
+    "intro": ""
+  },
+  {
+    "id": "НикитичНикита Кулиk",
+    "role": "副主席",
+    "intro": ""
+  },
+  {
+    "id": "太初",
+    "role": "工科部部长",
+    "intro": ""
+  }
 ]
