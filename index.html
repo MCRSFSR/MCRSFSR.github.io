@@ -21,7 +21,7 @@
       border: 1px solid #808080;
     }
     .titlebar {
-      background: linear-gradient(#8b0000, #c62828);
+      background: linear-gradient(#8d2626, #c62828);
       color: #fff;
       padding: 8px 12px;
       font-weight: bold;
@@ -64,9 +64,157 @@
       display: flex;
       justify-content: space-between;
     }
+
+    /* ===== 复古1950风（与经典千禧风可切换） ===== */
+    .hero { display: none; }
+    .theme-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: linear-gradient(#7a1414, #c1121f);
+      color: #f3e6c4;
+      border: 2px solid #caa64a;
+      padding: 10px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.4);
+      z-index: 50;
+    }
+
+    body.retro {
+      background: #241a12;
+      padding: 24px;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      color: #2a2118;
+    }
+    body.retro .window {
+      width: 820px; max-width: 100%; margin: 0 auto;
+      background: #ece1c4;
+      border: 3px double #9e1b1b;
+      box-shadow: 0 0 0 6px #ece1c4, 0 0 0 9px #caa64a, 0 16px 44px rgba(0,0,0,.55);
+    }
+    body.retro .titlebar {
+      display: block;
+      background: linear-gradient(#9e1b1b, #c1121f);
+      color: #f3e6c4;
+      border-bottom: 3px double #caa64a;
+      text-align: center;
+      font-size: 15px; font-weight: bold;
+      letter-spacing: 2px;
+      padding: 12px;
+      text-shadow: 1px 1px 0 #5a0d0d;
+    }
+    body.retro .navbar {
+      background: #d9c9a0;
+      border-bottom: 2px solid #9e1b1b;
+      text-align: center;
+      padding: 8px;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+    body.retro .navbar a {
+      color: #9e1b1b; font-weight: bold;
+      text-decoration: underline; margin: 0 6px;
+      font-size: 14px; letter-spacing: 1px;
+    }
+    body.retro .navbar a:hover { color: #caa64a; }
+
+    body.retro .content {
+      background:
+        repeating-linear-gradient(0deg, rgba(90,40,20,.04) 0 1px, transparent 1px 4px),
+        #ece1c4;
+      padding: 22px;
+    }
+
+    /* Hero 复古海报 */
+    body.retro .hero {
+      position: relative;
+      display: block;
+      text-align: center;
+      padding: 34px 24px 30px;
+      background:
+        repeating-linear-gradient(45deg, rgba(158,27,27,.10) 0 12px, transparent 12px 24px),
+        linear-gradient(#9e1b1b, #c1121f);
+      border-bottom: 4px double #caa64a;
+    }
+    body.retro .hero .stars { display: none; }
+    body.retro .hero .badge {
+      display: block;
+      width: 70px; height: 70px;
+      margin: 0 auto 10px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(202,166,74,.5));
+    }
+    body.retro .hero h1 {
+      margin: 6px 0 8px;
+      font-size: clamp(36px, 7vw, 60px);
+      font-weight: 900; letter-spacing: 6px;
+      color: #f3e6c4;
+      text-shadow: 2px 2px 0 #5a0d0d, 4px 4px 0 rgba(0,0,0,.25);
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+    body.retro .hero .tagline {
+      margin: 0;
+      font-size: clamp(12px, 3vw, 15px);
+      letter-spacing: 3px;
+      color: #f3e6c4; font-weight: bold;
+    }
+
+    body.retro .welcome { display: none; }
+
+    body.retro .content h2 {
+      position: relative;
+      font-size: 22px; color: #9e1b1b;
+      border-bottom: 3px double #caa64a;
+      padding-bottom: 6px; margin-top: 0;
+      letter-spacing: 2px; font-weight: 900;
+    }
+    body.retro .content h2::before { content: "★ "; color: #caa64a; }
+    body.retro .content h2 + p { line-height: 1.85; font-size: 14px; }
+    body.retro .joinbox {
+      background: #f3e6c4;
+      border: 2px solid #9e1b1b;
+      border-left: 8px solid #9e1b1b;
+      padding: 12px 14px; margin: 10px 0;
+      font-weight: bold; color: #7a1414;
+    }
+    body.retro .links a {
+      color: #9e1b1b; font-weight: bold;
+      text-decoration: underline; letter-spacing: 1px;
+    }
+    body.retro .links a:hover { color: #caa64a; }
+    body.retro .statusbar {
+      background: #9e1b1b; color: #f3e6c4;
+      border-top: 3px double #caa64a;
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      letter-spacing: 1px; font-weight: bold;
+    }
+    body.retro .theme-toggle {
+      background: linear-gradient(#7a1414, #c1121f);
+      color: #f3e6c4; border: 2px solid #caa64a;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 8px; }
+      .window { width: 100%; max-width: 100%; }
+      .navbar { font-size: 12px; word-break: break-word; }
+      .navbar a { margin-right: 2px; }
+      .content { padding: 14px; }
+      .statusbar { font-size: 10px; flex-direction: column; gap: 2px; }
+      input, textarea, select { font-size: 16px; }
+      .theme-toggle { bottom: 8px; right: 8px; padding: 8px 12px; font-size: 12px; }
+      body.retro { padding: 10px; }
+      body.retro .window { width: 100%; }
+      body.retro .hero { padding: 26px 16px 24px; }
+      body.retro .hero .badge { width: 52px; height: 52px; }
+      body.retro .content { padding: 16px; }
+      body.retro .joinbox { margin: 10px 0; }
+    }
   </style>
 </head>
-<body>
+<body class="theme-classic">
   <div class="window">
     <div class="titlebar">■ MCRSFSR Minecraft 服务器</div>
     <div class="navbar">
@@ -74,21 +222,45 @@
       <a href="members.html">成员</a> |
       <a href="articles.html">文章</a> |
       <a href="gallery.html">建筑展示</a> |
+      <a href="guestbook.html">留言</a> |
       <a href="news.html">新闻</a>
     </div>
     <div class="content">
-      <h2>欢迎来到 MCRSFSR</h2>
-      <p><strong>服务器版本：</strong>1.21.1（Java 版 + 基岩版 双轨制，支持插件与 Mod）</p>
+      <div class="hero">
+        <img class="badge" src="7EFE581B691734CE576D9F20142DF964.png" alt="★">
+        <h1>MCRSFSR</h1>
+        <p class="tagline">苏俄社会模拟 · 创造服务器 · 1.21.1 双轨制</p>
+      </div>
+
+      <h2 class="welcome">欢迎来到 MCRSFSR</h2>
+      <p class="welcome"><strong>服务器版本：</strong>1.21.1（Java 版 + 基岩版 双轨制，支持插件与 Mod）</p>
+
       <h2>服务器介绍</h2>
-      <p>MCRSFSR 是一个以苏联社会模拟为主题的《我的世界》服务器。与其说它是一个游戏服务器，不如说它更像一个在虚拟世界中尝试重现苏联时期社会、文化与生活氛围的玩家社区。</p>
-      <p><strong>如何加入：</strong></p>
+      <p>MCRSFSR 是一个以苏俄社会模拟为主题的《我的世界》服务器。与其说它是一个游戏服务器，不如说它更像一个在虚拟世界中尝试重现苏俄时期社会、文化与生活氛围的玩家社区。</p>
+
+      <h2>如何加入</h2>
+      <p><strong>加入方式：</strong></p>
       <div class="joinbox">加入 QQ 群 784823072（入群需审核），审核通过后将告知服务器地址与进入方式。</div>
-      <p style="margin-top:14px;"><a href="news.html">» 查看最新新闻</a> &nbsp; <a href="members.html">» 认识团队成员</a></p>
+
+      <p class="links"><a href="news.html">» 查看最新新闻</a> &nbsp; <a href="members.html">» 认识团队成员</a> &nbsp; <a href="guestbook.html">» 留言板</a></p>
     </div>
     <div class="statusbar">
       <span>© 2026 MCRSFSR</span>
       <span>访客第 000128 位</span>
     </div>
   </div>
+
+  <button id="themeToggle" class="theme-toggle">✦ 复古1950风</button>
+
+  <script>
+    const tb = document.getElementById('themeToggle');
+    function applyTheme(t) {
+      document.body.className = t;
+      localStorage.setItem('site_theme', t);
+      tb.textContent = (t === 'retro') ? '◀ 经典风格' : '✦ 复古1950风';
+    }
+    applyTheme(localStorage.getItem('site_theme') || 'retro');
+    tb.onclick = () => applyTheme(document.body.className === 'retro' ? 'theme-classic' : 'retro');
+  </script>
 </body>
 </html>
